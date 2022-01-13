@@ -54,6 +54,9 @@ while running :
       if event.key == pygame.K_SPACE:
         game.player.launch_projectile()
 
+      if event.key == pygame.K_RETURN and game.has_started == False:
+        game.start()
+
     elif event.type == pygame.KEYUP:
       game.pressed[event.key] = False
 

@@ -24,6 +24,10 @@ class Monster(pygame.sprite.Sprite):
       self.velocity = random.randint(1, 3)
       self.health = self.max_health
 
+      if self.game.comet_event.is_fully_loaded():
+        self.game.all_monsters.remove(self)
+        self.game.comet_event.attempt_fall()
+
   def forward(self):
     if not self.game.check_collision(self,self.game.all_players):
       self.rect.x -= self.velocity

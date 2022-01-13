@@ -1,14 +1,18 @@
 import pygame
 from player import Player
 from monster import Monster
+from comet_event import CometFallEvent
 
 class Game:
 
   def __init__(self):
     self.has_started = False
+    # create player and add it to a group (where he's alone)
     self.all_players = pygame.sprite.Group()
     self.player = Player(self)
     self.all_players.add(self.player)
+
+    self.comet_event = CometFallEvent(self)
     self.all_monsters = pygame.sprite.Group()
     self.pressed = {}
 
@@ -19,7 +23,10 @@ class Game:
     # update player's health bar
     self.player.update_health_bar(screen)
 
-    # get player projectiles
+    # update the game event bar
+    self.comet_event.update_bar(screen)
+
+    # move player projectiles
     for projectile in self.player.all_projectiles:
       projectile.move()
 
@@ -28,11 +35,18 @@ class Game:
       monster.forward()
       monster.update_health_bar(screen)
 
+    # make comets fall
+    for comet in self.comet_event.all_comets:
+      comet.fall()
+
     # Show the projectile image(s)
     self.player.all_projectiles.draw(screen)
 
     # show the monster image(s)
     self.all_monsters.draw(screen)
+
+    # show the comet image(s)
+    self.comet_event.all_comets.draw(screen)
 
     if self.pressed.get(pygame.K_RIGHT) and self.player.rect.x + self.player.rect.width < screen.get_width():
       self.player.move_right()
@@ -46,7 +60,9 @@ class Game:
 
   def game_over(self):
     # reset game and player
-    self.all_monsters = pygame.sprite.Group()
+    self.all_monsters = pygame.sprite.Group() # reset the all monsters group
+    self.comet_event.all_comets = pygame.sprite.Group()
+    self.comet_event.percent = 0 # resets the bar advancement
     self.player.health = self.player.max_health
     self.has_started = False
 
