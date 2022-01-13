@@ -26,14 +26,18 @@ class Game:
     # update the game event bar
     self.comet_event.update_bar(screen)
 
+    # update player animation
+    self.player.update_animation()
+
     # move player projectiles
     for projectile in self.player.all_projectiles:
       projectile.move()
 
-    # make monsters walk and update their health bar
+    # make monsters walk,  update their health bar and animate them
     for monster in self.all_monsters:
       monster.forward()
       monster.update_health_bar(screen)
+      monster.update_animation()
 
     # make comets fall
     for comet in self.comet_event.all_comets:
