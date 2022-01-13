@@ -3,6 +3,10 @@ from game import Game
 
 pygame.init() # Initialise pygame
 
+# define a clock
+clock = pygame.time.Clock()
+FPS = 60
+
 pygame.display.set_caption("Test oui oui")
 # pygame.display Permet de nommer la fenetre, voir ses dimensions, parametres d'initialisation
 screen = pygame.display.set_mode((1080,720))
@@ -65,4 +69,5 @@ while running :
       if play_button_rect.collidepoint(event.pos):
         game.start()
 
+  clock.tick(FPS)
 pygame.quit()

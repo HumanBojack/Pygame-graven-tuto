@@ -4,18 +4,21 @@ import animation
 
 class Monster(animation.AnimateSprite):
 
-  def __init__(self, game):
-    super().__init__("mummy")
+  def __init__(self, game, name, size, offset=0):
+    super().__init__(name, size)
     self.game = game
     self.health = 100
     self.max_health = 100
     self.attack = 0.3
     self.rect = self.image.get_rect()
     self.rect.x = 1000 + random.randint(0, 300)
-    self.rect.y = 550
-    self.velocity = random.randint(1, 3)
+    self.rect.y = 550 - offset
 
     self.start_animation()
+
+  def set_speed(self, speed):
+    self.default_speed = speed
+    self.velocity = random.randint(1, 3)
 
   def damage(self, amount):
     self.health -= amount
@@ -23,7 +26,7 @@ class Monster(animation.AnimateSprite):
     if self.health <= 0:
       # make it respawn (you ccould also delete it, but it saves memory)
       self.rect.x = 1000 + random.randint(0,300)
-      self.velocity = random.randint(1, 3)
+      self.velocity = random.randint(1, self.default_speed)
       self.health = self.max_health
 
       if self.game.comet_event.is_fully_loaded():
@@ -42,3 +45,20 @@ class Monster(animation.AnimateSprite):
 
   def update_animation(self):
     self.animate(loop=True)
+
+# define a mummy class
+class Mummy(Monster):
+
+  def __init__(self, game):
+    super().__init__(game, "mummy", (130,130))
+    self.set_speed(3)
+
+# define an alien class
+class Alien(Monster):
+
+  def __init__(self, game):
+    super().__init__(game, "alien", (300,300), 130)
+    self.health = 250
+    self.max_health = 250
+    self.set_speed(1)
+    self.attack = 0.8
