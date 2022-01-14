@@ -13,6 +13,7 @@ class Monster(animation.AnimateSprite):
     self.rect = self.image.get_rect()
     self.rect.x = 1000 + random.randint(0, 300)
     self.rect.y = 550 - offset
+    self.loot_amount = 1
 
     self.start_animation()
 
@@ -33,6 +34,9 @@ class Monster(animation.AnimateSprite):
         self.game.all_monsters.remove(self)
         self.game.comet_event.attempt_fall()
 
+      # add points to the score
+      self.game.score += self.loot_amount
+
   def forward(self):
     if not self.game.check_collision(self,self.game.all_players):
       self.rect.x -= self.velocity
@@ -52,6 +56,7 @@ class Mummy(Monster):
   def __init__(self, game):
     super().__init__(game, "mummy", (130,130))
     self.set_speed(3)
+    self.loot_amount = 20
 
 # define an alien class
 class Alien(Monster):
@@ -62,3 +67,4 @@ class Alien(Monster):
     self.max_health = 250
     self.set_speed(1)
     self.attack = 0.8
+    self.loot_amount = 80

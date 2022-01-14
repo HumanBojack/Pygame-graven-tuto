@@ -2,6 +2,7 @@ import pygame
 from player import Player
 from monster import Mummy, Alien
 from comet_event import CometFallEvent
+from sound import SoundManager
 
 class Game:
 
@@ -12,11 +13,20 @@ class Game:
     self.player = Player(self)
     self.all_players.add(self.player)
 
+    self.score = 0
+    self.font = pygame.font.Font("pygame/assets/SourceSansPro-Regular.ttf", 25) # To load a system font : pygame.font.SysFont("monospace", 16)
+
     self.comet_event = CometFallEvent(self)
     self.all_monsters = pygame.sprite.Group()
     self.pressed = {}
 
+    self.sound_manager = SoundManager()
+
   def update(self, screen):
+    # show the score on the screen
+    score_text = self.font.render(f"Score : {self.score}", 1, (0,0,0))
+    screen.blit(score_text, (20, 20))
+
     # Show the player image
     screen.blit(self.player.image, self.player.rect)
 
@@ -70,6 +80,8 @@ class Game:
     self.comet_event.percent = 0 # resets the bar advancement
     self.player.health = self.player.max_health
     self.has_started = False
+    self.score = 0
+    self.sound_manager.play("game_over")
 
   def spawn_monster(self, monster_class_name):
     self.all_monsters.add(monster_class_name.__call__(self))

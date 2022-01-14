@@ -29,6 +29,7 @@ class Player(animation.AnimateSprite):
     self.all_projectiles.add(Projectile(self))
     # start animation
     self.start_animation()
+    self.game.sound_manager.play("shoot")
 
   def move_right(self):
     if not self.game.check_collision(self, self.game.all_monsters):
